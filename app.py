@@ -23,6 +23,7 @@ THE SOFTWARE.
 # Import Python3 native modules
 from datetime import datetime
 import json
+import os
 import time
 import sys
 from threading import Thread
@@ -35,6 +36,7 @@ import paho.mqtt.client as mqtt
 
 # Import self-written custom modules
 from dummy_data import generateRandom
+import env_vars
 
 # Define constants and variables
 # Digital input ports
@@ -54,11 +56,11 @@ listen_thread = None
 terminate = False
 
 # MQTT setting
-BROKER_ADDRESS = 'broker.mqttdashboard.com'
-LISTEN_CLIENT_ID = 'clientId-IkSQdXHDhM'
-PUBLISH_CLIENT_ID = 'clientId-VvDNBdm3XL'
-TOPIC = 'topic-dwo/pi1/publishing'
-SUBSCRIBER = 'topic-dwo/pi1/listen'
+BROKER_ADDRESS = os.environ.get('BROKER_ADDRESS', 'No value set')
+LISTEN_CLIENT_ID = os.environ.get('LISTEN_CLIENT_ID', 'No value set')
+PUBLISH_CLIENT_ID = os.environ.get('PUBLISH_CLIENT_ID', 'No value set')
+TOPIC = os.environ.get('TOPIC', 'No value set')
+SUBSCRIBER = os.environ.get('SUBSCRIBER', 'No value set')
 
 client = None
 
