@@ -42,7 +42,7 @@ import env_vars
 # Digital input ports
 # SIG,NC,VCC,GND
 DHT_SENSOR_PORT = 7 # Temperature and Humidity sensor on D7
-LIGHT_SENSOR = 1 # Light sensor on A1
+LIGHT_SENSOR = 0 # Light sensor on A0
 DHT_SENSOR_TYPE = 0 #Input
 
 # Set IO modes
@@ -55,7 +55,7 @@ publishing_thread = None
 listen_thread = None
 terminate = False
 
-# MQTT setting
+# MQTT settings
 BROKER_ADDRESS = os.environ.get('BROKER_ADDRESS', 'No value set')
 LISTEN_CLIENT_ID = os.environ.get('LISTEN_CLIENT_ID', 'No value set')
 PUBLISH_CLIENT_ID = os.environ.get('PUBLISH_CLIENT_ID', 'No value set')
@@ -67,15 +67,15 @@ client = None
 
 def read_light_sensor():
     # TODO: Enable actual functionality and remove random number generatore
-    # return grovepi.analogRead(light_sensor)
-    return generateRandom('illuminance')
+    return grovepi.analogRead(light_sensor)
+    #return generateRandom('illuminance')
 
 
 def read_temperature_humidity():
     # TODO: Enable actual functionality and remove random number generatore
-    #[temp, hum] = dht(DHT_SENSOR_PORT, DHT_SENSOR_TYPE)
-    #return temp, hum
-    return generateRandom('temperature'), generateRandom('humidity')
+    [temp, hum] = dht(DHT_SENSOR_PORT, DHT_SENSOR_TYPE)
+    return temp, hum
+    #return generateRandom('temperature'), generateRandom('humidity')
 
 
 def on_connect(client, userdata, flags, reasonCode, properties):

@@ -1,7 +1,10 @@
 import json
 import os
+from threading import Thread
 
 from flask import Flask, render_template, jsonify
+
+import mqtt_helper
 
 app = Flask(__name__, static_url_path='/static')
 
@@ -11,9 +14,17 @@ def index(method=['GET']):
     return render_template('index.html')
 
 
+@app.route('/start_listener')
+def start_listening(method=['POST']):
+    try:
+        listening_thread=Thread(target=mqtt_helper.listen)
+        return json.dumps({'listenting': True})
+    except Exception: # TODO: Change to a more accurate error
+        return json.dumps({'listenting': False})
+
 @app.route('/api')
 def api(method=['GET','POST']):
-    """This is the function you can put your API logic into
+    """Listen to data from MQTT and return it
 
     Returns a JSON object
     """
