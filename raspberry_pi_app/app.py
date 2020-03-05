@@ -46,7 +46,7 @@ LIGHT_SENSOR = 0 # Light sensor on A0
 DHT_SENSOR_TYPE = 0 #Input
 
 # Set IO modes
-#grovepi.pinMode(LIGHT_SENSOR,"INPUT")
+grovepi.pinMode(LIGHT_SENSOR,"INPUT")
 
 # State variables
 publishing = True
@@ -67,7 +67,7 @@ client = None
 
 def read_light_sensor():
     # TODO: Enable actual functionality and remove random number generatore
-    return grovepi.analogRead(light_sensor)
+    return grovepi.analogRead(LIGHT_SENSOR)
     #return generateRandom('illuminance')
 
 
