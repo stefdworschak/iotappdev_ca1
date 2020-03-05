@@ -29,9 +29,9 @@ import sys
 from threading import Thread
 
 # Import 3rd party modules
-#import grovepi
-#from grovepi import *
-#from grove_rgb_lcd import *
+import grovepi
+from grovepi import *
+from grove_rgb_lcd import *
 import paho.mqtt.client as mqtt
 
 # Import self-written custom modules
@@ -41,7 +41,7 @@ import env_vars
 # Define constants and variables
 # Digital input ports
 # SIG,NC,VCC,GND
-DHT_SENSOR_PORT = 7 # Temperature and Humidity sensor on D7
+DHT_SENSOR_PORT = 8 # Temperature and Humidity sensor on D7
 LIGHT_SENSOR = 0 # Light sensor on A0
 DHT_SENSOR_TYPE = 0 #Input
 
@@ -153,6 +153,7 @@ def on_socket_unregister_write(client, userdata, reasonCode, properties):
 
 def publish():
     """ Read all sensors and publish the results to the MQTT broker """
+    print("Publishing Thread")
     client = start_client(PUBLISH_CLIENT_ID)
     while publishing:
         illuminance = read_light_sensor()
