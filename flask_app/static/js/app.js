@@ -1,11 +1,14 @@
 $(document).ready(function(){
-    $('#message_row')
-    let data = {
+     let cache = (localStorage.getItem('data') == undefined 
+            || localStorage.getItem('data') == null) ? {
         'timestamp': '',
         'illuminance': 0,
         'humidity': 0,
-        'temperature': 0
-    }
+        'temperature': 0,
+        'soil_sensor': 'N/A'
+    } : localStorage.getItem('data');
+    let data = {'payloadString': JSON.stringify(cache)}
+    onMessageArrived(data)
     let BROKER = 'broker.mqttdashboard.com';
     let PORT = 8000;
     let CLIENTID = 'clientId-jrhjgbKplR';
@@ -34,9 +37,12 @@ $(document).ready(function(){
         let c = 0;
         while(c < reading_keys.length){
             data[reading_keys[c]] = reading_vals[c];
+            $(`#${reading_keys[c]}_value`).text(reading_vals[c])
+            c++;
+            console.log(c)
         }
-        console.log(data);
-
+        localStorage.setItem('data', JSON.stringify(data));
+        console.log(localStorage.getItem('data'))
     }
 
 

@@ -2,12 +2,16 @@
     color:#FF0000;
 }
 
+.col-sm-12.col-md-3 {
+    height:100%;
+}
 
 .card {
     padding:20px;
     text-align:center;
     margin-top:30px;
     margin-bottom:10px;
+    height:100%;
 }
 
 .message_row {
