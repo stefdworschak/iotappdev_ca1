@@ -163,7 +163,8 @@ def publish():
             'timestamp': datetime.now().isoformat(),
             'illuminance': illuminance,
             'temperature': temp,
-            'humidity': hum
+            'humidity': hum,
+            'raspberry_pi': 1
         }
         client.publish(TOPIC, json.dumps(readings))
         print('Published readings: ', readings)

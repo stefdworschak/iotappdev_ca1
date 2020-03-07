@@ -42,3 +42,15 @@ div.pi_display {
 .second-header > span {
     font-weight: normal;
 }
+
+.message-text {
+    width:100%;
+}
+
+.message-text-div {
+    padding-top:20px;
+    text-align: left;
+}
+.message-text-div > button {
+    margin-top:10px;
+}

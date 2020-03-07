@@ -143,6 +143,7 @@ def publish():
         readings = {
             'timestamp': datetime.now().isoformat(),
             'soil_probe': soil_probe,
+            'raspberry_pi': 2,
         }
         client.publish(TOPIC, json.dumps(readings))
         print('Published readings: ', readings)
