@@ -32,3 +32,13 @@
 div.pi_display {
     padding:0px;
 }
+
+.second-header {
+   text-align: left;
+   padding-top:4px;
+   padding-bottom: 4px;
+   font-weight: bold; 
+}
+.second-header > span {
+    font-weight: normal;
+}

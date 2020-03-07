@@ -74,6 +74,7 @@ def read_light_sensor():
 def read_temperature_humidity():
     # TODO: Enable actual functionality and remove random number generatore
     [temp, hum] = dht(DHT_SENSOR_PORT, DHT_SENSOR_TYPE)
+    print(temp)
     return temp, hum
     #return generateRandom('temperature'), generateRandom('humidity')
 

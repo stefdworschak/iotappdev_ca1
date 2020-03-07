@@ -68,7 +68,7 @@
                 <div class="col-sm-12 col-md-3">
                     <div class="card">
                         <span class="number_display">
-                            <span id="soil_sensor_value">80</span>
+                            <span id="soil_probe_value">-</span>
                         </span>
                         <span class="number_title">
                             Soil Reading
@@ -82,6 +82,9 @@
 
                     <div class="card pi_display">
                         <div class="card-header"><h1>Raspberry PI 1</h1></div>
+                        <div class="card-header second-header">
+                            Last updated: <span id="pi1_timestamp"></span>
+                        </div>
                         <div class="card-body">
                             <button class="btn btn-primary">Send Message</button>
                             <button class="btn btn-warning">Disable Publishing</button>
@@ -94,6 +97,9 @@
                     
                     <div class="card pi_display">
                         <div class="card-header"><h1>Raspberry PI 2</h1></div>
+                        <div class="card-header second-header">
+                            Last updated: <span id="pi2_timestamp"></span>
+                        </div>
                         <div class="card-body">
                             <button class="btn btn-primary">Send Message</button>
                             <button class="btn btn-warning">Disable Publishing</button>
