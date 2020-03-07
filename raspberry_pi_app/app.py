@@ -122,13 +122,14 @@ def on_message(client, userdata, message):
                 publishing_thread.start()
         else:
             # Send last reading before turning off to also change button
+            temp, hum = read_temperature_humidity()
             readings = {
                 'pi1_timestamp': 0,
-                'illuminance': illuminance,
+                'illuminance': read_light_sensor(),
                 'temperature': temp,
                 'humidity': hum,
                 'raspberry_pi': 1,
-                'publishing': false,
+                'publishing': False,
             }
             client.publish(TOPIC, json.dumps(readings))
             publishing = False
@@ -171,7 +172,7 @@ def publish():
         temp, hum = read_temperature_humidity()
         readings = {
             'pi1_timestamp': datetime.now().isoformat(),
-            'illuminance': illuminance,
+            'illuminance': read_light_sensor(),
             'temperature': temp,
             'humidity': hum,
             'raspberry_pi': 1

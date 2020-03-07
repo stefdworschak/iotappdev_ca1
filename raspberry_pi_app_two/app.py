@@ -106,9 +106,9 @@ def on_message(client, userdata, message):
             # Send last reading before turning off to also change button
             readings = {
                 'pi2_timestamp': 0,
-                'soil_probe': soil_probe,
+                'soil_probe': read_soil_sensor(),
                 'raspberry_pi': 2,
-                'publishing' : false,
+                'publishing' : False,
             }
             client.publish(TOPIC, json.dumps(readings))
             publishing = False
@@ -146,11 +146,10 @@ def publish():
     """ Read all sensors and publish the results to the MQTT broker """
     print("Publishing Thread")
     client = start_client(PUBLISH_CLIENT_ID)
-    while publishing:
-        soil_probe = read_soil_sensor()      
+    while publishing:     
         readings = {
             'pi2_timestamp': datetime.now().isoformat(),
-            'soil_probe': soil_probe,
+            'soil_probe': read_soil_sensor(),
             'raspberry_pi': 2,
         }
         client.publish(TOPIC, json.dumps(readings))
