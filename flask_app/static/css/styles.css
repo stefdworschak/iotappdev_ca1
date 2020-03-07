@@ -54,3 +54,7 @@ div.pi_display {
 .message-text-div > button {
     margin-top:10px;
 }
+
+#pi2_disable, #pi1_disable {
+    display:none;
+}

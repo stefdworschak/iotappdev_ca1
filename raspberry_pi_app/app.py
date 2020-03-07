@@ -160,7 +160,7 @@ def publish():
         illuminance = read_light_sensor()
         temp, hum = read_temperature_humidity()
         readings = {
-            'timestamp': datetime.now().isoformat(),
+            'pi1_timestamp': datetime.now().isoformat(),
             'illuminance': illuminance,
             'temperature': temp,
             'humidity': hum,

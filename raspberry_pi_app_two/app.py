@@ -141,7 +141,7 @@ def publish():
     while publishing:
         soil_probe = read_soil_sensor()      
         readings = {
-            'timestamp': datetime.now().isoformat(),
+            'pi2_timestamp': datetime.now().isoformat(),
             'soil_probe': soil_probe,
             'raspberry_pi': 2,
         }

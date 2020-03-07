@@ -1,6 +1,7 @@
 $(document).ready(function(){
     /* Pre-loading data from the localStorage */
     let data = {'payloadString': JSON.stringify(getCachedData())}
+    console.log(data);
     setDefaultValues(data);
 
     /* Define Broker */
@@ -48,7 +49,8 @@ $(document).ready(function(){
         localStorage.setItem('illuminance', readings['illuminance']);
         localStorage.setItem('temperature', readings['temperature']);
         localStorage.setItem('humidity', readings['humidity']);
-        localStorage.setItem('pi1_timestamp', readings['timestamp']);
+        localStorage.setItem('pi1_timestamp', readings['pi1_timestamp']);
+        enableDisable('pi1');
     }
 
     // called when a message arrives
@@ -59,25 +61,39 @@ $(document).ready(function(){
         $('#pi2_timestamp').text(readings['timestamp']);
         $('#soil_probe_value').text(soil_status);
         localStorage.setItem('soil_probe', soil_status);
-        localStorage.setItem('pi2_timestamp', readings['timestamp']);
-        console.log(localStorage.getItem('soil_probe'))
+        localStorage.setItem('pi2_timestamp', readings['pi2_timestamp']);
+        enableDisable('pi2');
     }
 
+    function getDefault(item){
+        
+        if(item == 'pi1_timestamp' || item == 'pi2_timestamp'){
+            console.log('Return Timestamp')
+            return localStorage.getItem(item) != undefined ? localStorage.getItem(item) : 0;
+        }
+        return localStorage.getItem(item) != undefined ? localStorage.getItem(item) : '-';
+    }
+
+    function checkEnabled(pi){
+        const expiryTime = 20 * 1000; //12s expiry time
+        let timestamp = getDefault(`${pi}_timestamp`);
+        if(timestamp != undefined){
+            const diff = new Date().getTime() - new Date(timestamp).getTime();
+            return diff < expiryTime;
+        }
+        return false; 
+    }
 
     function getCachedData(){
-        let illuminance = localStorage.getItem('illuminance') != undefined ? localStorage.getItem('illuminance') : "-";
-        let temperature = localStorage.getItem('temperature') != undefined ? localStorage.getItem('temperature') : "-";
-        let humidity = localStorage.getItem('humidity') != undefined ? localStorage.getItem('humidity') : "-";
-        let soil_probe = localStorage.getItem('soil_probe') != undefined ? localStorage.getItem('soil_probe') : "-";
-        let p1_ts = localStorage.getItem('pi1_timestamp') != undefined ? localStorage.getItem('pi1_timestamp') : "-";
-        let p2_ts = localStorage.getItem('pi1_timestamp') != undefined ? localStorage.getItem('pi1_timestamp') : "-";
         return {
-                'pi1_timestamp': p1_ts,
-                'pi2_timestamp': p2_ts,
-                'illuminance': illuminance,
-                'humidity': humidity,
-                'temperature': temperature,
-                'soil_probe': soil_probe,
+                'pi1_timestamp': getDefault('pi1_timestamp'),
+                'pi2_timestamp': getDefault('pi2_timestamp'),
+                'pi1_enabled': checkEnabled('pi1'),
+                'pi2_enabled': checkEnabled('pi2'),
+                'illuminance': getDefault('illuminance'),
+                'humidity': getDefault('humidity'),
+                'temperature': getDefault('temperature'),
+                'soil_probe': getDefault('soil_probe'),
         };
     }
 
@@ -89,10 +105,27 @@ $(document).ready(function(){
     function enablePI1Buttons(){
         $('#pi1_send').click(function(){
             const MSG_TOPIC = 'topic-dwo/pi1/listen';
-            let message_text = $('.message-text').val();
-            let message_data = `{"message": "${message_text}", "publishing": true}`;
-            sendMessage(message_data, MSG_TOPIC);
+            const enabled = checkEnabled('p1');
+            console.log(enabled);
+            //let message_text = $('.message-text').val();
+            //let message_data = `{"message": "${message_text}", "publishing": true}`;
+            //sendMessage(message_data, MSG_TOPIC);
         });
+    }
+
+    function runEnableDisable(){
+        enableDisable('pi1');
+        enableDisable('pi2');
+    }
+
+    function enableDisable(pi){
+        if(checkEnabled(pi)){
+            $(`.${pi}_control > button.btn.btn-primary`).hide();
+            $(`.${pi}_control > button.btn.btn-warning`).show();
+        } else {
+            $(`.${pi}_control > button.btn.btn-primary`).show();
+            $(`.${pi}_control > button.btn.btn-warning`).hide();
+        }
     }
 
     function sendMessage(message_data, destination){
