@@ -103,6 +103,14 @@ def on_message(client, userdata, message):
                 publishing_thread.daemon = True
                 publishing_thread.start()
         else:
+            # Send last reading before turning off to also change button
+            readings = {
+                'pi2_timestamp': 0,
+                'soil_probe': soil_probe,
+                'raspberry_pi': 2,
+                'publishing' : false,
+            }
+            client.publish(TOPIC, json.dumps(readings))
             publishing = False
             print("Not Publishing")
             

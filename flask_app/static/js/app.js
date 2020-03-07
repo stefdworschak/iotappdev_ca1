@@ -42,7 +42,7 @@ $(document).ready(function(){
     function onMessageArrived(message) {
         console.log("onMessageArrived:"+message.payloadString);
         let readings = JSON.parse(message.payloadString);
-        $('#pi1_timestamp').text(readings['timestamp']);
+        $('#pi1_timestamp').text(readings['pi1_timestamp']);
         $('#illuminance_value').text(readings['illuminance']);
         $('#temperature_value').text(readings['temperature']);
         $('#humidity_value').text(readings['humidity']);
@@ -58,7 +58,7 @@ $(document).ready(function(){
         console.log("onMessageArrived:"+message.payloadString);
         let readings = JSON.parse(message.payloadString);
         let soil_status = readings['soil_probe'] == 1 ? 'Low': 'High';
-        $('#pi2_timestamp').text(readings['timestamp']);
+        $('#pi2_timestamp').text(readings['pi2_timestamp']);
         $('#soil_probe_value').text(soil_status);
         localStorage.setItem('soil_probe', soil_status);
         localStorage.setItem('pi2_timestamp', readings['pi2_timestamp']);
@@ -75,8 +75,8 @@ $(document).ready(function(){
     }
 
     function checkEnabled(pi){
-        const expiryTime = 20 * 1000; //12s expiry time
-        let timestamp = getDefault(`${pi}_timestamp`);
+        const expiryTime = 10 * 1000; //12s expiry time
+        let timestamp = localStorage.getItem(`${pi}_timestamp`);
         if(timestamp != undefined){
             const diff = new Date().getTime() - new Date(timestamp).getTime();
             return diff < expiryTime;
@@ -119,6 +119,7 @@ $(document).ready(function(){
     }
 
     function enableDisable(pi){
+        console.log(checkEnabled(pi))
         if(checkEnabled(pi)){
             $(`.${pi}_control > button.btn.btn-primary`).hide();
             $(`.${pi}_control > button.btn.btn-warning`).show();
