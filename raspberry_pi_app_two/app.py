@@ -78,6 +78,21 @@ def on_subscribe(client, userdata, mid, reasonCode, properties):
     print('Properties=%s' % properties)
 
 
+def last_message(client):
+    """ Send a last response after disabling publishing or before closing the
+    app in order to handle the callback on the client side
+
+    Returns nothing """
+    readings = {
+        'pi2_timestamp': 0,
+        'soil_probe': read_soil_sensor(),
+        'raspberry_pi': 2,
+        'publishing' : False,
+    }
+    client.publish(TOPIC, json.dumps(readings))
+    return
+
+
 def on_message(client, userdata, message):
     print('Message received=%s' % str(message.payload.decode('utf-8')))
     print('Message topic=%s' % (message.topic))
@@ -104,13 +119,7 @@ def on_message(client, userdata, message):
                 publishing_thread.start()
         else:
             # Send last reading before turning off to also change button
-            readings = {
-                'pi2_timestamp': 0,
-                'soil_probe': read_soil_sensor(),
-                'raspberry_pi': 2,
-                'publishing' : False,
-            }
-            client.publish(TOPIC, json.dumps(readings))
+            last_message(client)
             publishing = False
             print("Not Publishing")
             
