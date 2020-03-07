@@ -96,6 +96,24 @@ def on_subscribe(client, userdata, mid, reasonCode, properties):
     print('Properties=%s' % properties)
 
 
+def last_message(client):
+    """ Send a last response after disabling publishing or before closing the
+    app in order to handle the callback on the client side
+
+    Returns nothing """
+    temp, hum = read_temperature_humidity()
+    readings = {
+        'pi1_timestamp': 0,
+        'illuminance': read_light_sensor(),
+        'temperature': temp,
+        'humidity': hum,
+        'raspberry_pi': 1,
+        'publishing': False,
+    }
+    client.publish(TOPIC, json.dumps(readings))
+    return
+
+
 def on_message(client, userdata, message):
     print('Message received=%s' % str(message.payload.decode('utf-8')))
     print('Message topic=%s' % (message.topic))
@@ -122,16 +140,7 @@ def on_message(client, userdata, message):
                 publishing_thread.start()
         else:
             # Send last reading before turning off to also change button
-            temp, hum = read_temperature_humidity()
-            readings = {
-                'pi1_timestamp': 0,
-                'illuminance': read_light_sensor(),
-                'temperature': temp,
-                'humidity': hum,
-                'raspberry_pi': 1,
-                'publishing': False,
-            }
-            client.publish(TOPIC, json.dumps(readings))
+            last_message(client)
             publishing = False
             print("Not Publishing")
             
