@@ -66,7 +66,6 @@ $(document).ready(function(){
     }
 
     function getDefault(item){
-        
         if(item == 'pi1_timestamp' || item == 'pi2_timestamp'){
             console.log('Return Timestamp')
             return localStorage.getItem(item) != undefined ? localStorage.getItem(item) : 0;
@@ -85,6 +84,7 @@ $(document).ready(function(){
     }
 
     function getCachedData(){
+        runEnableDisable();
         return {
                 'pi1_timestamp': getDefault('pi1_timestamp'),
                 'pi2_timestamp': getDefault('pi2_timestamp'),
@@ -103,14 +103,33 @@ $(document).ready(function(){
     }
 
     function enablePI1Buttons(){
-        $('#pi1_send').click(function(){
-            const MSG_TOPIC = 'topic-dwo/pi1/listen';
-            const enabled = checkEnabled('p1');
-            console.log(enabled);
-            //let message_text = $('.message-text').val();
-            //let message_data = `{"message": "${message_text}", "publishing": true}`;
-            //sendMessage(message_data, MSG_TOPIC);
+        $('.btn').click(function(){
+            const pi = $(this).data('pi');
+            const msg = $(this).data('message');
+            const MSG_TOPIC = `topic-dwo/pi${pi}/listen`;
+            console.log(MSG_TOPIC)
+            const message_data = getMessageContent(msg);
+            console.log(message_data);
+            sendMessage(message_data, MSG_TOPIC)      
         });
+    }
+
+    function getMessageContent(msg){
+        console.log(msg)
+        switch(msg){
+            case true:
+                return `{"publishing": true}`;
+                break;
+            case false:
+                return `{"publishing": false}`;
+                break;
+            case 'terminate':
+                return `{"terminate": true}`;
+                break;
+            default:
+                return `{"publishing": false}`;
+                break;
+        }
     }
 
     function runEnableDisable(){

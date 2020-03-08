@@ -101,12 +101,9 @@ def last_message(client):
     app in order to handle the callback on the client side
 
     Returns nothing """
-    temp, hum = read_temperature_humidity()
     readings = {
         'pi1_timestamp': 0,
         'illuminance': read_light_sensor(),
-        'temperature': temp,
-        'humidity': hum,
         'raspberry_pi': 1,
         'publishing': False,
     }
